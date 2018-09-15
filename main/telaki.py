@@ -2678,23 +2678,35 @@ def rebuild_database():
     db.create_all()
 
     client = Client(
-        client_no='pisara',
-        name='Pisara Business Solutions',
-        app_id='x65gtry7b7u7oT5dAbi7oKudp6AptkGA',
-        app_secret='72755ee33c36657daaa38a57a50728f8ef2b00189577a0f5fb432f8549386239',
-        passphrase='k7W6Y9hNfz',
-        shortcode='21587460',
-        plan='1299.00',
-        max_outgoing=2500,
+        client_no='qpdc',
+        name='Quezon Province Dental Chapter',
+        app_id='EGXMuB5eEgCMLTKxExieqkCGeGeGuBon',
+        app_secret='f3e1ab30e23ea7a58105f058318785ae236378d1d9ebac58fe8b42e1e239e1c3',
+        passphrase='24BUubukMQ',
+        shortcode='21588479',
+        plan='799.00',
+        max_outgoing=1200,
         created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
         )
 
     admin = AdminUser(
-        client_no='pisara',
+        client_no='qpdc',
+        email='cy.lucero@yahoo.com',
+        password='clinic123',
+        api_key=generate_api_key(),
+        name='Cyril Barcelona',
+        role='Administrator',
+        join_date=datetime.datetime.now().strftime('%B %d, %Y'),
+        added_by_name='None',
+        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        )
+
+    admin1 = AdminUser(
+        client_no='qpdc',
         email='hello@pisara.tech',
         password='ratmaxi8',
         api_key=generate_api_key(),
-        name='Super Admin',
+        name='Super User',
         role='Administrator',
         join_date=datetime.datetime.now().strftime('%B %d, %Y'),
         added_by_name='None',
@@ -3044,7 +3056,7 @@ def rebuild_database():
     # db.session.add(client1)
     # db.session.add(client1)
     db.session.add(admin)
-    # db.session.add(admin1)
+    db.session.add(admin1)
     # db.session.add(admin2)
     # db.session.add(contact)
     # db.session.add(conversations)
