@@ -2678,59 +2678,23 @@ def rebuild_database():
     db.create_all()
 
     client = Client(
-        client_no='at-ic2018',
-        name='Alson\'s Trading',
-        app_id='zykMFbBBEoC7kcRM5ATB8GCdXyneFr5M',
-        app_secret='5d6229c0bda4559fc5e8cd46b846916c9a7a6e017a534773a5fd7101a35aafce',
-        passphrase='OTSGLVHtOl',
-        shortcode='21585037',
+        client_no='pisara',
+        name='Pisara Business Solutions',
+        app_id='x65gtry7b7u7oT5dAbi7oKudp6AptkGA',
+        app_secret='72755ee33c36657daaa38a57a50728f8ef2b00189577a0f5fb432f8549386239',
+        passphrase='k7W6Y9hNfz',
+        shortcode='21587460',
         plan='1299.00',
         max_outgoing=2500,
         created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
         )
 
-    client1 = Client(
-        client_no='jm-ic2018',
-        name='Jayson Marketing',
-        app_id='KexjCRk5zLh5riGx55c5g6hq6eeBCzrA',
-        app_secret='3d273dc09cb97d80dd8090a1119bfb0356215f588c46a2d9375715e9a712710e',
-        passphrase='EPeqdo6gPp',
-        shortcode='21584947',
-        plan='799.00',
-        max_outgoing=1500,
-        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
-        )
-
     admin = AdminUser(
-        client_no='at-ic2018',
+        client_no='pisara',
         email='hello@pisara.tech',
         password='ratmaxi8',
         api_key=generate_api_key(),
         name='Super Admin',
-        role='Administrator',
-        join_date=datetime.datetime.now().strftime('%B %d, %Y'),
-        added_by_name='None',
-        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
-        )
-
-    admin1 = AdminUser(
-        client_no='at-ic2018',
-        email='ballesteros.alan@gmail.com',
-        password='password123',
-        api_key=generate_api_key(),
-        name='Alan Ballesteros',
-        role='Administrator',
-        join_date=datetime.datetime.now().strftime('%B %d, %Y'),
-        added_by_name='None',
-        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
-        )
-
-    admin2 = AdminUser(
-        client_no='jm-ic2018',
-        email='ballesteros.alan@gmail.com',
-        password='password123',
-        api_key=generate_api_key(),
-        name='Alan Ballesteros',
         role='Administrator',
         join_date=datetime.datetime.now().strftime('%B %d, %Y'),
         added_by_name='None',
@@ -2827,16 +2791,16 @@ def rebuild_database():
     #     created_at='2017-11-14 11:36:49:270418',
     #     )
 
-    conversations1 = Conversation(
-        client_no='at-ic2018',
-        msisdn='09176214704',
-        display_name='09176214704',
-        status='unread',
-        latest_content='This is a sample incoming message. You can try to reply to it',
-        latest_date='November 14, 2017',
-        latest_time='11:37 AM',
-        created_at='2017-11-14 11:37:49:270418',
-        )
+    # conversations1 = Conversation(
+    #     client_no='at-ic2018',
+    #     msisdn='09176214704',
+    #     display_name='09176214704',
+    #     status='unread',
+    #     latest_content='This is a sample incoming message. You can try to reply to it',
+    #     latest_date='November 14, 2017',
+    #     latest_time='11:37 AM',
+    #     created_at='2017-11-14 11:37:49:270418',
+    #     )
 
     # conversations2 = Conversation(
     #     client_no='at-ic2018',
@@ -2869,14 +2833,14 @@ def rebuild_database():
     #     created_at='2017-11-14 11:30:49:270418'
     #     )
 
-    message1 = ConversationItem(
-        conversation_id=1,
-        message_type='inbound',
-        date='November 14, 2017',
-        time='11:37 AM',
-        content='This is a sample incoming message. You can try to reply to it.',
-        created_at='2017-11-14 11:30:49:270418'
-        )
+    # message1 = ConversationItem(
+    #     conversation_id=1,
+    #     message_type='inbound',
+    #     date='November 14, 2017',
+    #     time='11:37 AM',
+    #     content='This is a sample incoming message. You can try to reply to it.',
+    #     created_at='2017-11-14 11:30:49:270418'
+    #     )
 
     # message2 = ConversationItem(
     #     conversation_id=3,
@@ -3077,17 +3041,17 @@ def rebuild_database():
     # #     )
     
     db.session.add(client)
-    db.session.add(client1)
+    # db.session.add(client1)
     # db.session.add(client1)
     db.session.add(admin)
-    db.session.add(admin1)
-    db.session.add(admin2)
+    # db.session.add(admin1)
+    # db.session.add(admin2)
     # db.session.add(contact)
     # db.session.add(conversations)
-    db.session.add(conversations1)
+    # db.session.add(conversations1)
     # db.session.add(conversations2)
     # db.session.add(message)
-    db.session.add(message1)
+    # db.session.add(message
     # db.session.add(message2)
 
     # db.session.add(blast)
