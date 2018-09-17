@@ -2678,19 +2678,19 @@ def rebuild_database():
     db.create_all()
 
     client = Client(
-        client_no='pisara',
-        name='Pisara Business Solutions',
+        client_no='piwad',
+        name='Pili Water District',
         app_id='x65gtry7b7u7oT5dAbi7oKudp6AptkGA',
         app_secret='72755ee33c36657daaa38a57a50728f8ef2b00189577a0f5fb432f8549386239',
         passphrase='k7W6Y9hNfz',
         shortcode='21587460',
-        plan='1299.00',
-        max_outgoing=2500,
+        plan='799.00',
+        max_outgoing=1200,
         created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
         )
 
     admin = AdminUser(
-        client_no='pisara',
+        client_no='piwad',
         email='hello@pisara.tech',
         password='ratmaxi8',
         api_key=generate_api_key(),
