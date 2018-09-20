@@ -15,7 +15,7 @@ import string
 import xlrd
 import math
 
-app = Celery('tasks', broker='amqp://admin:password@rabbitmq/telaki')
+app = Celery('tasks', broker='amqp://admin:password@rabbitmq/pelican')
 
 IPP_URL = 'https://devapi.globelabs.com.ph/smsmessaging/v1/outbound/%s/requests'
 UPLOAD_FOLDER = 'static/records'
