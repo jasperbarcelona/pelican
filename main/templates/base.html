@@ -10,6 +10,7 @@
                 <link rel="stylesheet" href="../static/css/style.css">
                 <link rel="stylesheet" href="../static/css/icon.css">
                 <link rel="stylesheet" href="../static/css/bootstrap-select.css">
+                <link rel="stylesheet" href="../static/css/bootstrap-toggle.min.css">
                 <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
                 <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> -->
                 <!--<script src="//fast.eager.io/sgP7QN5AJL.js"></script>
@@ -18,11 +19,11 @@
                 <title>Dashboard | {{client_name}}</title>
         </head>
         {% if change_pw == 'yes' %}
-        <body onload="initialize_recipients();change_password();">
+        <body onload="change_password()">
         {% else %}
-        <body onload="initialize_recipients()">
+        <body>
         {% endif %}
-                <div id="mainPreloader" class="wrapperloader">
+                <div id="mainPreloader" class="wrapperloader hidden">
                         <svg id="loaderSVG" viewBox="0 0 190 132" style="background-color:#ffffff00" xmlns="http://www.w3.org/2000/svg">
                                 <g stroke="#FFF" stroke-width="2" fill="none">
                                         <path d="M183.618.5c3.234 0 5.882 2.647 5.882 5.88v119.24c0 3.233-2.648 5.88-5.882 5.88H6.382C3.148 131.5.5 128.853.5 125.62V6.38C.5 3.147 3.148.5 6.382.5h177.236z" />
@@ -31,7 +32,7 @@
                                         <path d="M187.5 129.5l-55-55" />
                                 </g>
                         </svg>
-                        <span class="loading-label">Welcome to Telaki! Please wait.</span>
+                        <span class="loading-label">Welcome! Please wait.</span>
                 </div>
                 {% include 'header.html' %}
                 {% include 'modals.html' %}
@@ -53,5 +54,6 @@
                 <script src="../static/js/bootstrap.min.js"></script>
                 <script src="../static/js/floatlabels.js"></script>
                 <script src="../static/js/bootstrap-clockpicker.js"></script>
+                <script src="../static/js/bootstrap-toggle.min.js"></script>
         </body>
 </html>

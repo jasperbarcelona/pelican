@@ -2,24 +2,17 @@
 {% block content %}
 <div class="left-panel">
 	<div class="compose-btn-container">
-		<button id="composeMessage" class="btn btn-primary">Compose SMS Blast</button>
+		<button id="startRaffle" class="btn btn-primary" data-toggle="modal" data-target="#addRaffleModal" data-backdrop="static" data-keyboard="false">Start New Raffle</button>
 	</div>
 	<div class="lower-panel-container">
-		<div id="navConversations" class="panel-nav-item active" onclick="show_conversations('reset')">
-			<span class="nav-label">Conversations</span>
+		<div id="navRaffles" class="panel-nav-item active" onclick="show_raffles('reset')">
+			<span class="nav-label">Raffles</span>
 		</div>
 		<div id="navBlasts" class="panel-nav-item" onclick="show_blasts('reset')">
-			<span class="nav-label">Text Blasts</span>
+			<span class="nav-label">Participants</span>
 		</div>
 		<div id="navReminders" class="panel-nav-item" onclick="show_payment_reminders('reset')">
-			<span class="nav-label">Payment Reminders</span>
-		</div>
-		<div class="nav-separator"></div>
-		<div id="navContacts" class="panel-nav-item" onclick="show_contacts('reset')">
-			<span class="nav-label">Contacts</span>
-		</div>
-		<div id="navGroups" class="panel-nav-item" onclick="show_groups('reset')">
-			<span class="nav-label">Groups</span>
+			<span class="nav-label">Results</span>
 		</div>
 		<div class="nav-separator"></div>
 		{% if user_role == 'Administrator' %}
@@ -52,29 +45,30 @@
 <div class="content">
 	<div class="content-header">
 		<div class="content-right-btn-container">
-			<button class="btn control-btn" onclick="show_conversations('reset')"><i class="material-icons">&#xE5D5;</i></button>
-			<button id="deleteConversationsBtn" data-toggle="modal" data-target="#deleteConversationsModal" class="btn control-btn hidden"><i class="material-icons">&#xE872;</i></button>
+			<button class="btn control-btn" onclick="show_raffles('reset')"><i class="material-icons">&#xE5D5;</i></button>
+			<button id="addRaffleBtn" class="btn control-btn" data-toggle="modal" data-target="#addRaffleModal" data-backdrop="static" data-keyboard="false"><i class="material-icons md-30">add</i></button>
+			<button id="deleterafflesBtn" data-toggle="modal" data-target="#deleterafflesModal" class="btn control-btn hidden"><i class="material-icons">&#xE872;</i></button>
 			<div class="pagination-btn-container">
 				<div class="pagination-label-container">
-					<span class="pagination-label"><strong id="paginationShowingConversation">1-{{ limit }}</strong></span>
+					<span class="pagination-label"><strong id="paginationShowingraffle">1-{{ limit }}</strong></span>
 					<span class="pagination-label separator">of</span>
-					<span class="pagination-label"><strong id="paginationTotalConversation">{{ total_entries }}</strong></span>
+					<span class="pagination-label"><strong id="paginationTotalraffle">{{ total_entries }}</strong></span>
 				</div>
 				{% if prev_btn == 'enabled' %}
-				<button class="btn pagination-btn left conversation" onclick="conversation_prev_page()"><i class="material-icons">&#xE5CB;</i></button>
+				<button class="btn pagination-btn left raffle" onclick="raffle_prev_page()"><i class="material-icons">&#xE5CB;</i></button>
 				{% else %}
-				<button class="btn pagination-btn left conversation" onclick="conversation_prev_page()" disabled><i class="material-icons">&#xE5CB;</i></button>
+				<button class="btn pagination-btn left raffle" onclick="raffle_prev_page()" disabled><i class="material-icons">&#xE5CB;</i></button>
 				{% endif %}
 
 				{% if next_btn == 'enabled' %}
-				<button class="btn pagination-btn right conversation" onclick="conversation_next_page()"><i class="material-icons">&#xE5CC;</i></button>
+				<button class="btn pagination-btn right raffle" onclick="raffle_next_page()"><i class="material-icons">&#xE5CC;</i></button>
 				{% else %}
-				<button class="btn pagination-btn right conversation" onclick="conversation_next_page()" disabled><i class="material-icons">&#xE5CC;</i></button>
+				<button class="btn pagination-btn right raffle" onclick="raffle_next_page()" disabled><i class="material-icons">&#xE5CC;</i></button>
 				{% endif %}
 			</div>
 		</div>
 	</div>
-	{% if not conversations[0] %}
+	{% if not raffles[0] %}
 	<div class="empty-overlay">
 		<span class="empty-label">No records yet.</span>
 	</div>
@@ -85,73 +79,45 @@
 		</div>
 		<table class="table content-table">
 			<thead>
-				<tr class="search-panel conversation">
+				<tr class="search-panel raffle">
 					<td class="icon-td">
-						<span id="clearConversationsSearch" class="hidden link" onclick="show_conversations('reset')">Clear Search</span>
+						<span id="clearrafflesSearch" class="hidden link" onclick="show_raffles('reset')">Clear Search</span>
 					</td>
-					<td class="msisdn-td">
-						<input type="text" id="searchConversationName" class="form-control search-conversations search-text" placeholder="Name / Phone">
+					<td class="name-td">
+						<input type="text" id="searchRaffleName" class="form-control search-raffles search-text" placeholder="Raffle Name">
 					</td>
-					<td class="message-td">
-						<input type="text" id="searchConversationContent" class="form-control search-conversations search-text" placeholder="Message content">
+					<td class="start-date-td">
+						<input type="text" id="searchRaffleStartDate" class="form-control search-raffles search-text datepicker" placeholder="Start Date">
 					</td>
-					<td class="date-td align-right">
-						<input type="text" id="searchConversationDate" class="form-control search-conversations search-text align-right datepicker" placeholder="Date">
+					<td class="end-date-td">
+						<input type="text" id="searchRaffleEndDate" class="form-control search-raffles search-text datepicker" placeholder="End Date">
+					</td>
+					<td class="participants-td align-right">
+						<input type="text" id="searchRaffleParticipants" class="form-control search-raffles search-text align-right" placeholder="Participants">
+					</td>
+					<td class="slots-td align-right">
+						<input type="text" id="searchRaffleSlots" class="form-control search-raffles search-text align-right" placeholder="Available Slots">
 					</td>
 				</tr>
 			</thead>
-			<tbody id="conversationsTbody">
-				{% for entry in conversations %}
-				{% if entry.status == 'unread' %}
-				<tr class="unread">
-				{% else %}
-				<tr>
-				{% endif %}
+			<tbody id="rafflesTbody">
+				{% for entry in raffles %}
 					<td class="icon-td">
-						<i data-id="{{ entry.id }}" class="conversations-check material-icons">&#xE835;</i>
-						<i data-id="{{ entry.id }}" class="conversations-star material-icons">&#xE83A;</i>
+						<i data-id="{{ entry.id }}" class="raffles-check material-icons">&#xE835;</i>
 					</td>
-					<td class="msisdn-td" onclick="open_conversation({{ entry.id }})">{{ entry.display_name }}</td>
-					<td class="message-td" onclick="open_conversation({{ entry.id }})">{{ entry.latest_content }}</td>
-					<td class="date-td align-right" onclick="open_conversation({{ entry.id }})">{{ entry.latest_date }}</td>
+					<td class="name-td" onclick="open_raffle({{ entry.id }})">{{ entry.name }}</td>
+					<td class="start-date-td" onclick="open_raffle({{ entry.id }})">{{ entry.start_date }}</td>
+					<td class="end-date-td" onclick="open_raffle({{ entry.id }})">{{ entry.end_date }}</td>
+					<td class="participants-td align-right" onclick="open_raffle({{ entry.id }})">{{ entry.participants }}</td>
+					{% if entry.limited_slots %}
+					<td class="slots-td align-right" onclick="open_raffle({{ entry.id }})">{{ entry.vacant_slots }}</td>
+					{% else %}
+					<td class="slots-td align-right" onclick="open_raffle({{ entry.id }})">Unlimited</td>
+					{% endif %}
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
-	</div>
-</div>
-<div id="messageContainer">
-	<div class="message-header">
-		<div class="message-header-left">
-			<span>New Message</span>
-		</div>
-		<div class="message-header-right">
-			<div>
-				<i id="closeMessage" class="material-icons" onclick="close_message()">&#xE5CD;</i>
-				<span id="minimizeMessage">_</span>
-			</div>
-		</div>
-	</div>
-	<div class="message-recipients-container">
-		<div id="recipientContainer">
-			<span class="empty-recipient-label">Recipients</span>
-		</div>
-		<div class="add-recipient-container">
-			<i id="addRecipientBtn" class="material-icons" data-toggle="modal" data-target="#addRecipientModal" data-backdrop="static" data-keyboard="false">&#xE145;</i>
-		</div>
-	</div>
-	<div class="message-body-container">
-		<textarea oninput="textCounter(this,'characterCounter',980);" id="messageBody" class="form-control" placeholder="Write your message here"></textarea>
-	</div>
-	<div class="message-footer-container">
-		<div class="message-footer-left">
-			<button type="button" id="sendMessageBtn" class="btn btn-primary" onclick="send_text_blast()" data-loading-text="Preparing" data-complete-text="Send">Send</button>
-		</div>
-		<div class="message-footer-right">
-			<div>
-				<input disabled  value="Remaining: 980" id="characterCounter">
-			</div>
-		</div>
 	</div>
 </div>
 {% endblock %}

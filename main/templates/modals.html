@@ -1,42 +1,3 @@
-<div class="modal fade" id="saveContactModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">New Contact</h4>
-            </div>
-            <div class="modal-body">
-                <span id="groupsLabel" class="input-group-label">Basic Info:</span>
-                <div class="input-container whole">
-                    <input type="text" id="saveContactName" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" onkeyup="validate_save()" data-error="errorContactNameSave" class="form-control floatlabel" data-class="input-label" placeholder="Full Name">
-                    <div id="errorContactNameSave" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
-                </div>
-                <div class="input-text-container">
-                    <input type="text" id="saveContactMsisdn" disabled class="form-control floatlabel" data-class="input-label" placeholder="Mobile Number">
-                </div>
-                <span class="input-group-label">Contact Type:</span>
-                <div class="contact-type-picker customer" onclick="validate_save()">Customer</div>
-                <div class="contact-type-picker staff" onclick="validate_save()">Staff</div>
-                <span id="groupsLabel" class="input-group-label">Groups:</span>
-                {% if not groups[0] %}
-                <span class="no-groups-label">You don't have any groups.</span>
-                {% else %}
-                <input type="text" id="searchGroupFromContactSave" class="form-control" placeholder="Search groups">
-                <div id="saveContactGroupContainer" class="contact-group-container">
-                    {% for group in groups %}
-                    <div id="{{ group.id }}" class="group-picker-save" onclick="toggle_group_save({{group.id}})">{{ group.name }}</div>
-                    {% endfor %}
-                </div>
-                <div id="saveGroupSearchLoading" class="group-search-loading hidden">Loading..</div>
-                {% endif %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-                <button id="saveContactBtn" type="button" class="btn btn-primary modal-btn" data-loading-text="Saving.." data-complete-text="Save" onclick="save_contact()" disabled>Save</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -117,43 +78,6 @@
     </div><!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="groupMembersModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">Group</h4>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-                <button id="saveGroupEditBtn" type="button" class="btn btn-primary modal-btn" onclick="save_group_change()" disabled>Save</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">New Group</h4>
-            </div>
-            <div class="modal-body">
-                <div class="input-container whole">
-                    <input type="text" id="addGroupName" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" onkeyup="validate_group()" data-error="errorGroupName" class="form-control floatlabel" data-class="input-label" placeholder="Group Name">
-                    <div id="errorGroupName" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
-                </div>
-                <span id="createGroupError" class="error-text hidden"></span>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-                <button id="saveGroupBtn" type="button" class="btn btn-primary modal-btn" onclick="save_group()" disabled>Save</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
 <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -177,266 +101,162 @@
     </div><!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="viewGroupModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade" id="addRaffleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">Group</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel">New Raffle</h4>
             </div>
             <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="editContactModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="addRecipientModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">Contacts</h4>
-            </div>
-            <div class="modal-body">
-                <div class="add-recipient-left">
-                    <div id="tabs">
-                        <ul class="nav recipient-nav-tabs nav-tabs">
-                            <li class="active">
-                                <a href="#groupContactTab" class="tab-item" data-toggle="tab">Groups</a>
-                            </li>         
-                            <li>
-                                <a href="#individualContactTab" class="tab-item" data-toggle="tab">Individual</a>
-                            </li>
-                            <li>
-                                <a href="#numberContactTab" class="tab-item" data-toggle="tab">Number</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content recipient-tab-content">
-                        <div class="tab-pane recipient-tab-pane active" id="groupContactTab">
-                            <div class="recipient-group-search-container">
-                                <input type="text" id="searchContactGroups" class="form-control" placeholder="Search contact groups">
-                            </div>
-                            <div id="recipientGroupLoading" class="hidden">Loading..</div>
-                            <div id="recipientGroupContainer">
-                                {% if contact_count == 0 %}
-                                <div id="everyoneRecipient" class="recipient-group" onclick="empty_popup()">
-                                {% else %}
-                                <div id="everyoneRecipient" class="recipient-group" onclick="add_everyone_recipient({{ contact_count }})"">
-                                {% endif %}
-                                    <div class="recipient-group-left">
-                                        <span class="recipient-group-name">Everyone</span>
-                                    </div>
-                                    <div class="recipient-group-right align-right">
-                                        {% if contact_count == 1 %}
-                                        <span class="recipient-group-members">{{ contact_count }} member</span>
-                                        {% else %}
-                                        <span class="recipient-group-members">{{ contact_count }} members</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% if customers_count == 0 %}
-                                <div id="customersRecipient" class="recipient-group" onclick="empty_popup()">
-                                {% else %}
-                                <div id="customersRecipient" class="recipient-group" onclick="add_customers_recipient({{ customers_count }})">
-                                {% endif %}
-                                    <div class="recipient-group-left">
-                                        <span class="recipient-group-name">All Customers</span>
-                                    </div>
-                                    <div class="recipient-group-right align-right">
-                                        {% if customers_count == 1 %}
-                                        <span class="recipient-group-members">{{ customers_count }} member</span>
-                                        {% else %}
-                                        <span class="recipient-group-members">{{ customers_count }} members</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% if staff_count == 0 %}
-                                <div id="staffRecipient" class="recipient-group" onclick="empty_popup()">
-                                {% else %}
-                                <div id="staffRecipient" class="recipient-group" onclick="add_staff_recipient({{ staff_count }})">
-                                {% endif %}
-                                    <div class="recipient-group-left">
-                                        <span class="recipient-group-name">All Staff</span>
-                                    </div>
-                                    <div class="recipient-group-right align-right">
-                                        {% if staff_count == 1 %}
-                                        <span class="recipient-group-members">{{ staff_count }} member</span>
-                                        {% else %}
-                                        <span class="recipient-group-members">{{ staff_count }} members</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% for group in groups %}
-                                {% if group.size == 0 %}
-                                <div id="{{ group.id }}" class="recipient-group" onclick="empty_popup()">
-                                {% else %}
-                                <div id="{{ group.id }}" class="recipient-group" onclick="add_recipient({{ group.id }}, '{{ group.name }}', {{ group.size }})">
-                                {% endif %}
-                                    <div class="recipient-group-left">
-                                        <span class="recipient-group-name">{{ group.name }}</span>
-                                    </div>
-                                    <div class="recipient-group-right align-right">
-                                        {% if group.size == 1 %}
-                                        <span class="recipient-group-members">{{ group.size }} member</span>
-                                        {% else %}
-                                        <span class="recipient-group-members">{{ group.size }} members</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="tab-pane recipient-tab-pane" id="individualContactTab">
-                            <div class="recipient-individual-search-container">
-                                <input type="text" id="searchRecipientName" class="form-control" placeholder="Search contacts">
-                            </div>
-                            <div id="recipientContactLoading" class="hidden">Loading..</div>
-                            <div id="recipientContactContainer">
-                                {% for contact in contacts %}
-                                <div id="{{ contact.id }}" class="recipient-contact" onclick="add_individual_recipient({{ contact.id }}, '{{ contact.name }}')">
-                                    <div class="recipient-contact-left">
-                                        <span class="recipient-contact-name">{{ contact.name }}</span>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="tab-pane recipient-tab-pane" id="numberContactTab">
-                            <div class="recipient-number-search-container">
-                                <input type="text" id="addNumberRecipient" class="form-control" placeholder="Type number here">
-                                <div class="add-number-recipient-container">
-                                    <button type="button" id="addNumberRecipientBtn" class="btn btn-primary" onclick="add_number_recipient()" disabled>Add</button>
-                                </div>
-                            </div>
-                            <div id="recipientNumberContainer">
-                               
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="add-recipient-right">
-                    <div class="add-recipient-right-header">
-                        <span>Recipients</span><span id="recipientCount">(0):</span>
-                    </div>
-                    <div class="add-recipient-right-body">
-                        <div class="no-recipient">
-                            <span>Empty</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="saveRecipientsBtn" type="button" class="btn btn-primary modal-btn" onclick="save_recipients()">Done</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="addReminderModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">Text Blast (File Upload)</h4>
-            </div>
-            <div class="modal-body">
-                <form id="uploadFileForm" method="post" enctype="multipart/form-data">
-                    <input name="file" id="file" type="file">
-                </form>
-                <span id="fileErrorMessage" class="error-text hidden"></span>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-                <button id="sendReminderBtn" type="button" class="btn btn-primary modal-btn" onclick="send_reminder()" data-loading-text="Preparing.." data-complete-text="Upload" disabled>Upload</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="uploadContactsModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">Import Contacts (File Upload)</h4>
-            </div>
-            <div class="modal-body">
-                <form id="uploadContactsForm" method="post" enctype="multipart/form-data">
-                    <input name="contactsFile" id="contactsFile" type="file">
-                </form>
-                <span id="contactsFileErrorMessage" class="error-text hidden"></span>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-                <button id="uploadContactsBtn" type="button" class="btn btn-primary modal-btn" onclick="upload_contacts()" data-loading-text="Preparing.." data-complete-text="Upload" disabled>Upload</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="viewReminderModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">File</h4>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="gridSystemModalLabel">New Contact</h4>
-            </div>
-            <div class="modal-body">
-                <span id="groupsLabel" class="input-group-label">Basic Info:</span>
+                <span id="groupsLabel" class="input-group-label">Raffle Info:</span>
                 <div class="input-container whole">
-                    <input type="text" id="addContactName" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" onkeyup="validate_add()" data-error="errorContactName" class="form-control floatlabel" data-class="input-label" placeholder="Full Name">
-                    <div id="errorContactName" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                    <label for="addRaffleName">Name</label>
+                    <input type="text" id="addRaffleName" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleName" class="form-control" data-class="input-label" placeholder="Raffle name">
+                    <div id="errorRaffleName" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
                 </div>
                 <div class="input-container whole">
-                    <input type="text" id="addContactMsisdn" data-error="errorContactMsisdn" onblur="validate_blank(this,this.value); validate_msisdn(this,this.value);" class="form-control floatlabel" data-class="input-label" placeholder="Mobile Number">
-                    <div id="errorContactMsisdn" class="error-icon-container hidden tooltip" title="Must be exactly 11 characters."><i class="material-icons">&#xE001;</i></div>
+                    <label for="addRaffleName">Keyword</label>
+                    <input type="text" id="addRaffleKeyword" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleKeword" class="form-control" data-class="input-label" placeholder="This is the keyword that the participants will use (must not contain spaces)" onkeypress="return restrict_space(event)">
+                    <div id="errorRaffleKeword" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
                 </div>
-                <span class="input-group-label">Contact Type:</span>
-                <div class="contact-type-picker customer add-contact-picker" onclick="validate_add()">Customer</div>
-                <div class="contact-type-picker staff add-contact-picker" onclick="validate_add()">Staff</div>
-                <span id="groupsLabel" class="input-group-label">Groups:</span>
-                <input type="text" id="searchGroupFromContact" class="form-control" placeholder="Search groups">
-                <div id="addContactGroupContainer" class="contact-group-container">
-                    {% if not groups[0] %}
-                    <span class="no-groups-label">You don't have any groups.</span>
-                    {% else %}
-                    {% for group in groups %}
-                    <div id="{{ group.id }}" class="group-picker-add" onclick="toggle_group_add({{group.id}})">{{ group.name }}</div>
-                    {% endfor %}
-                    {% endif %}
+                <div class="input-container whole textarea">
+                    <label for="addRaffleDesc">Description</label>
+                    <textarea id="addRaffleDesc" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleDesc" class="form-control" data-class="input-label" placeholder="This will appear in HELP message"></textarea>
+                    <div id="errorRaffleDesc" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
                 </div>
-                <div id="contactGroupSearchLoading" class="group-search-loading hidden">Loading..</div>
+                <div class="input-container left">
+                    <label for="addRaffleStartDate">Start Date</label>
+                    <input type="text" id="addRaffleStartDate" data-error="errorRaffleStartDate" onblur="validate_blank(this,this.value)" class="form-control datepicker" data-class="input-label" placeholder="Raffle start date">
+                    <div id="errorRaffleStartDate" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container right">
+                    <label for="addRaffleEndDate">End Date</label>
+                    <input type="text" id="addRaffleEndDate" data-error="errorRaffleEndDate" onblur="validate_blank(this,this.value)" class="form-control datepicker" data-class="input-label" placeholder="Raffle end date">
+                    <div id="errorRaffleEndDate" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container left">
+                    <label for="addRaffleSlots">Slots</label>
+                    <input type="number" id="addRaffleSlots" data-error="errorRaffleSlots" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Maximum Entries" disabled>
+                    <div id="errorRaffleSlots" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container right">
+                    <label for="addRaffleIsLimited" class="stretch">Limited Slots</label>
+                    <input type="checkbox" id="addRaffleIsLimited" class="form-control" data-toggle="toggle">
+                </div>
+                <span id="brandCount" class="input-group-label more-margin">Participating Brands: (0 Items)</span>
+                <table id="brandTable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="brand-name-td">Brand Name</th>
+                            <th class="brand-code-td">Code (POS)</th>
+                            <th class="brand-delete-td"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button id="addBrandBtn" class="btn btn-primary" data-toggle="modal" data-target="#addBrandModal">Add Brand</button>
+                <span id="prizeCount" class="input-group-label more-margin">Prizes: (0 Items)</span>
+                <table id="prizeTable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="prize-label-td">Label</th>
+                            <th class="prize-td">Prize</th>
+                            <th class="prize-delete-td"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button id="addPrizeBtn" class="btn btn-primary" data-toggle="modal" data-target="#addPrizeModal">Add Prize</button>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
-                <button id="addContactBtn" type="button" class="btn btn-primary modal-btn" onclick="add_contact()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+                <button type="button" class="btn btn-danger modal-btn" onclick="clear_raffle_data()">Close</button>
+                <button id="saveRaffleBtn" type="button" class="btn btn-primary modal-btn" onclick="add_raffle()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="addPrizeModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">New Prize</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-container whole">
+                    <label for="addPrizeLabel">Label</label>
+                    <input type="text" data-error="errorPrizeLabel" id="addPrizeLabel" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="e.g. Grand Prize, 2nd Prize, etc..">
+                    <div id="errorPrizeLabel" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+
+                <div class="input-container whole">
+                    <label for="addPrize">Prize</label>
+                    <input type="text" data-error="errorPrize" id="addPrize" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="e.g. PHP 1,000,000">
+                    <div id="errorPrize" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Cancel</button>
+                <button type="button" id="savePrizeBtn" class="btn btn-primary modal-btn" onclick="save_prize()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="forgotPrizeModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">New Prize</h4>
+            </div>
+            <div class="modal-body">
+                <span class="forgot-label">Whoops! Looks like you forgot to add prizes.</span>
+                <div class="input-container whole">
+                    <label for="forgotPrizeLabel">Label</label>
+                    <input type="text" data-error="errorForgotPrizeLabel" id="forgotPrizeLabel" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="e.g. Grand Prize, 2nd Prize, etc..">
+                    <div id="errorForgotPrizeLabel" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+
+                <div class="input-container whole">
+                    <label for="forgotPrize">Prize</label>
+                    <input type="text" data-error="errorForgotPrize" id="forgotPrize" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="e.g. PHP 1,000,000">
+                    <div id="errorForgotPrize" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Cancel</button>
+                <button type="button" id="saveForgotPrizeBtn" class="btn btn-primary modal-btn" onclick="save_forgot_prize()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="addBrandModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">Participating Brand</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-container whole">
+                    <label for="addBrandName">Brand Name</label>
+                    <input type="text" data-error="errorBrandName" id="addBrandName" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Brand Name">
+                    <div id="errorBrandName" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+
+                <div class="input-container whole">
+                    <label for="addBrandCode">Brand Code</label>
+                    <input type="text" data-error="errorBrandCode" id="addBrandCode" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Brand Code (this is what we'll look for in your transaction records)">
+                    <div id="errorBrandCode" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Cancel</button>
+                <button type="button" id="saveBrandBtn" class="btn btn-primary modal-btn" onclick="save_brand()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 
 
 <!-- START OF DELETE ENTRIES -->

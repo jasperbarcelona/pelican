@@ -40,6 +40,12 @@ select {
 	padding-left: 10px !important;
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
 .btn {
 	border-radius: 2px !important;
 }
@@ -307,7 +313,7 @@ select {
 .pagination-btn:focus,
 .pagination-btn:active {
 	color: #fff;
-  	background-color: #c9302c;
+  	background-color: #286090;
   	outline: none !important;
 }
 
@@ -376,19 +382,45 @@ select {
 }
 
 .icon-td {
-	width: 10%;
+	width: 5%;
 }
 
-.msisdn-td {
+.name-td {
+	width: 25%;
+}
+
+.start-date-td {
 	width: 20%;
 }
 
-.message-td {
-	width: 50%;
+.end-date-td {
+	width: 20%;
 }
 
-.date-td {
-	width: 20%;
+.participants-td {
+	width: 15%;
+}
+
+.slots-td {
+	width: 15%;
+}
+
+.prize-label-td,
+.prize-td,
+.brand-name-td,
+.brand-code-td {
+	width: 45% !important;
+}
+
+.prize-delete-td,
+.brand-delete-td {
+	width: 10% !important;
+}
+
+.delete-prize,
+.delete-brand {
+	font-size: 14px !important;
+	color: #d9534f;
 }
 
 #editUserApi, .user-api-td {
@@ -748,6 +780,7 @@ select {
 .modal-body {
 	float: left;
 	width: 100%;
+	background-color: #FFFFFF;
 }
 
 #createGroupModal,
@@ -756,11 +789,7 @@ select {
 	z-index: 9999 !important;
 }
 
-#saveContactModal .modal-body,
-#editContactModal .modal-body,
-#addContactModal .modal-body,
-#viewReminderModal .modal-body,
-#groupMembersModal .modal-body {
+#addRaffleModal .modal-body {
 	height: calc(100vh - 180px);
 	padding-left: 30px;
 	padding-right: 30px;
@@ -769,24 +798,7 @@ select {
 	background-color: #FFFFFF;
 }
 
-#addReminderModal .modal-body,
-#createGroupModal .modal-body,
-#addUserModal .modal-body,
-#resetPasswordModal .modal-body,
-#editUserModal .modal-body,
-#changePasswordModal .modal-body,
-#createGroupModalContact .modal-body,
-#createGroupModalContactSave .modal-body,
-#uploadContactsModal .modal-body {
-	background-color: #FFFFFF;
-}
-
-#saveContactModal .modal-dialog,
-#editContactModal .modal-dialog,
-#addRecipientModal .modal-dialog,
-#addContactModal .modal-dialog,
-#viewReminderModal .modal-dialog,
-#groupMembersModal .modal-dialog {
+#addRaffleModal .modal-dialog {
 	width: 900px;
 }
 
@@ -798,61 +810,23 @@ select {
 	background-color: #FFFFFF;
 }
 
-#saveContactModal .form-control:not(#searchGroupFromContactSave),
-#editContactModal .form-control:not(#searchGroupFromEdit),
-#createGroupModal .form-control,
-#addUserModal .form-control:not(#addUserEmail):not(#addUserPassword),
-#editUserModal .form-control:not(#editUserEmail),
-#createGroupModalContact .form-control,
-#createGroupModalContactSave .form-control,
-#addContactModal .form-control:not(#searchGroupFromContact),
-#addReminderModal .form-control,
-#groupMembersModal .form-control:not(.search-members) {
-	margin-bottom: 10px;
-	text-transform: capitalize;
-	outline: none !important;
+#addRaffleModal .form-control:not(#addRaffleDesc) {
 	height: 40px;
-	margin-bottom: 20px;
-	border-top: 0 !important;
-	border-left: 0 !important;
-	border-right: 0 !important;
-	border-bottom: 1px solid #999;
-	box-shadow: none !important;
-	border-radius: 0 !important;
 	font-size: 15px;
 }
 
-#addUserEmail,
-#addUserPassword,
-#searchGroupFromContact,
-#resetPasswordModal .form-control,
-#searchGroupFromEdit,
-#editUserEmail,
-#searchGroupFromContactSave,
-#changePasswordModal .form-control {
-	margin-bottom: 10px;
-	outline: none !important;
-	height: 40px;
-	margin-bottom: 20px;
-	border-top: 0 !important;
-	border-left: 0 !important;
-	border-right: 0 !important;
-	border-bottom: 1px solid #999;
-	box-shadow: none !important;
-	border-radius: 0 !important;
-	font-size: 15px;
+#addRaffleIsLimited {
+	width: 200px !important;
+}
+
+.stretch {
+	width: 100%;
 }
 
 .group-members-container {
 	float: left;
 	width: 100%;
 	margin-top: 20px;
-}
-
-#createGroupModal .form-control,
-#createGroupModalContact .form-control,
-#createGroupModalContactSave .form-control {
-	text-transform: none !important;
 }
 
 .contact-type-picker,
@@ -957,6 +931,10 @@ select {
 	color: #494949;
 }
 
+.input-group-label.more-margin {
+	margin-top: 50px !important;
+}
+
 #addContactMsisdn,
 #editContactMsisdn,
 .contact-type-picker,
@@ -1026,13 +1004,24 @@ select {
 	background-color: #337AB7;
 }
 
+textarea {
+	width: 100%;
+	height: 100px !important;
+	resize: none;
+	padding: 10px;
+}
+
 .input-container {
 	position: relative;
-	height: 60px;
+	margin-bottom: 20px;
 }
 
 .input-container .form-control {
 	padding-right: 50px;
+}
+
+.error-icon-container {
+	padding-top: 45px;
 }
 
 .input-container.left .error-icon-container {
@@ -1078,13 +1067,13 @@ select {
 }
 
 .error-icon-container i {
-	color: #337AB7 !important;
+	color: #d9534f !important;
 	font-size: 25px !important;
 	cursor: pointer;
 }
 
 .error-text {
-	color: #337AB7;
+	color: #d9534f;
 	font-weight: bold;
 }
 
@@ -1674,4 +1663,10 @@ select {
 	-webkit-user-select: none;
   	-moz-user-select: none;
   	-ms-user-select: none;
+}
+
+.forgot-label {
+	float: left;
+	width: 100%;
+	margin-bottom: 20px;
 }

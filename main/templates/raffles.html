@@ -1,0 +1,76 @@
+<div class="content-header">
+	<div class="content-right-btn-container">
+		<button class="btn control-btn" onclick="show_raffles('reset')"><i class="material-icons">&#xE5D5;</i></button>
+		<button id="addRaffleBtn" class="btn control-btn" data-toggle="modal" data-target="#addRaffleModal" data-backdrop="static" data-keyboard="false"><i class="material-icons md-30">add</i></button>
+		<button id="deleterafflesBtn" data-toggle="modal" data-target="#deleterafflesModal" class="btn control-btn hidden"><i class="material-icons">&#xE872;</i></button>
+		<div class="pagination-btn-container">
+			<div class="pagination-label-container">
+				<span class="pagination-label"><strong id="paginationShowingraffle">1-{{ limit }}</strong></span>
+				<span class="pagination-label separator">of</span>
+				<span class="pagination-label"><strong id="paginationTotalraffle">{{ total_entries }}</strong></span>
+			</div>
+			{% if prev_btn == 'enabled' %}
+			<button class="btn pagination-btn left raffle" onclick="raffle_prev_page()"><i class="material-icons">&#xE5CB;</i></button>
+			{% else %}
+			<button class="btn pagination-btn left raffle" onclick="raffle_prev_page()" disabled><i class="material-icons">&#xE5CB;</i></button>
+			{% endif %}
+
+			{% if next_btn == 'enabled' %}
+			<button class="btn pagination-btn right raffle" onclick="raffle_next_page()"><i class="material-icons">&#xE5CC;</i></button>
+			{% else %}
+			<button class="btn pagination-btn right raffle" onclick="raffle_next_page()" disabled><i class="material-icons">&#xE5CC;</i></button>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% if not raffles[0] %}
+<div class="empty-overlay">
+	<span class="empty-label">No records yet.</span>
+</div>
+{% endif %}
+<div class="content-body">
+	<div id="searchLoader" class="hidden">
+		Loading..
+	</div>
+	<table class="table content-table">
+		<thead>
+			<tr class="search-panel raffle">
+				<td class="icon-td">
+					<span id="clearrafflesSearch" class="hidden link" onclick="show_raffles('reset')">Clear Search</span>
+				</td>
+				<td class="name-td">
+					<input type="text" id="searchRaffleName" class="form-control search-raffles search-text" placeholder="Raffle Name">
+				</td>
+				<td class="start-date-td">
+					<input type="text" id="searchRaffleStartDate" class="form-control search-raffles search-text datepicker" placeholder="Start Date">
+				</td>
+				<td class="end-date-td">
+					<input type="text" id="searchRaffleEndDate" class="form-control search-raffles search-text datepicker" placeholder="End Date">
+				</td>
+				<td class="participants-td align-right">
+					<input type="text" id="searchRaffleParticipants" class="form-control search-raffles search-text align-right" placeholder="Participants">
+				</td>
+				<td class="slots-td align-right">
+					<input type="text" id="searchRaffleSlots" class="form-control search-raffles search-text align-right" placeholder="Available Slots">
+				</td>
+			</tr>
+		</thead>
+		<tbody id="rafflesTbody">
+			{% for entry in raffles %}
+				<td class="icon-td">
+					<i data-id="{{ entry.id }}" class="raffles-check material-icons">&#xE835;</i>
+				</td>
+				<td class="name-td" onclick="open_raffle({{ entry.id }})">{{ entry.name }}</td>
+				<td class="start-date-td" onclick="open_raffle({{ entry.id }})">{{ entry.start_date }}</td>
+				<td class="end-date-td" onclick="open_raffle({{ entry.id }})">{{ entry.end_date }}</td>
+				<td class="participants-td align-right" onclick="open_raffle({{ entry.id }})">{{ entry.participants }}</td>
+				{% if entry.limited_slots %}
+				<td class="slots-td align-right" onclick="open_raffle({{ entry.id }})">{{ entry.vacant_slots }}</td>
+				{% else %}
+				<td class="slots-td align-right" onclick="open_raffle({{ entry.id }})">Unlimited</td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

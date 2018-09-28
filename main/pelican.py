@@ -121,19 +121,11 @@ def send_message(address,shortcode,app_id,app_secret,passphrase,message):
 def index():
     if not session:
         return redirect('/login')
-    session['conversation_limit'] = 50
-    session['group_recipients'] = []
-    session['individual_recipients'] = []
-    session['group_recipients_name'] = []
-    session['individual_recipients_name'] = []
-    session['number_recipients'] = []
-    total_entries = Conversation.query.filter_by(client_no=session['client_no']).count()
-    conversations = Conversation.query.filter_by(client_no=session['client_no']).order_by(Conversation.created_at.desc()).slice(session['conversation_limit'] - 50, session['conversation_limit'])
-    groups = Group.query.filter_by(client_no=session['client_no']).order_by(Group.name)
-    contacts = Contact.query.filter_by(client_no=session['client_no']).order_by(Contact.name)
-    contact_count = Contact.query.filter_by(client_no=session['client_no']).count()
-    customers_count = Contact.query.filter_by(client_no=session['client_no'], contact_type='Customer').count()
-    staff_count = Contact.query.filter_by(client_no=session['client_no'], contact_type='Staff').count()
+    session['raffles_limit'] = 50
+    session['prizes'] = []
+    session['brands'] = []
+    total_entries = Raffle.query.filter_by(client_no=session['client_no']).count()
+    raffles = Raffle.query.filter_by(client_no=session['client_no']).order_by(Raffle.created_at.desc()).slice(session['raffles_limit'] - 50, session['raffles_limit'])
 
     user = AdminUser.query.filter_by(id=session['user_id']).first()
     if user.password == user.temp_pw:
@@ -147,11 +139,11 @@ def index():
     if not bill or bill == None:
         bill = Bill(
             date=datetime.datetime.now().strftime('%B, %Y'),
+            year=datetime.datetime.now().strftime('%Y'),
             client_no=session['client_no'],
             created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f'),
-            used=0,
-            price=client.plan,
-            available=client.max_outgoing
+            transactions=0,
+            price='0'
             )
         db.session.add(bill)
         db.session.commit()
@@ -161,16 +153,11 @@ def index():
         'index.html',
         client_name=session['client_name'],
         user_name=session['user_name'],
-        conversations=conversations,
-        groups=groups,
-        contacts=contacts,
+        raffles=raffles,
         limit=total_entries,
         total_entries=total_entries,
         prev_btn='disabled',
         next_btn='disabled',
-        contact_count=contact_count,
-        customers_count=customers_count,
-        staff_count=staff_count,
         change_pw=change_pw,
         user_role=user.role
     )
@@ -178,16 +165,11 @@ def index():
         'index.html',
         client_name=session['client_name'],
         user_name=session['user_name'],
-        conversations=conversations,
-        groups=groups,
-        contacts=contacts,
-        limit=session['conversation_limit'],
+        raffles=raffles,
+        limit=session['raffles_limit'],
         total_entries=total_entries,
         prev_btn='disabled',
         next_btn='enabled',
-        contact_count=contact_count,
-        customers_count=customers_count,
-        staff_count=staff_count,
         change_pw=change_pw,
         user_role=user.role
     )
@@ -282,28 +264,6 @@ def globe_webook():
 
         shopper = Shopper.query.filter_by(client_no=client.client_no,msisdn='0%s' % data['senderAddress'][-10:]).first()
         if not shopper or shopper == None:
-            send_message(
-                '0%s' % data['senderAddress'][-10:],
-                client.shortcode,
-                client.app_id,
-                client.app_secret,
-                client.passphrase,
-                ('Sorry, but you are not yet registered to %s %s raffle promo. To validate '
-                 'your entries and qualify for this raffle, please register first by texting %s '
-                 'PROMO-TITLE REG <name/complete address/birthday MMDDYY>. Example: %s %s REG '
-                 'Amadeo L. Vertigo/112 Roxas Street, Davao City/020287. Get a chance to win %s ' 
-                 'and other exciting prizes! Hotline %s. Promo period %s until %s. Per DTI %s') % \
-                 (client.client_code, raffle.title, client.client_code, client.client_code,\
-                    raffle.title, raffle.grand_prize, client.shortcode, raffle.start_date,\
-                    raffle.end_date, raffle.dti_permit)
-                )
-            return jsonify(
-                status='success',
-                message='Message processed successfully.'
-                ),200
-
-        shopper_participant = RaffleShopper.query.filter_by(raffle_id=raffle.id, shopper_id=shopper.id).first()
-        if not shopper_participant or shopper_participant == None:
             send_message(
                 '0%s' % data['senderAddress'][-10:],
                 client.shortcode,
@@ -426,6 +386,110 @@ def globe_webook():
             status='success',
             message='Message processed successfully.'
             ),200
+
+
+@app.route('/raffles',methods=['GET','POST'])
+def show_raffles():
+    slice_from = flask.request.args.get('slice_from')
+    prev_btn = 'enabled'
+    if slice_from == 'reset':
+        session['raffles_limit'] = 50
+        prev_btn = 'disabled'
+    total_entries = Raffle.query.filter_by(client_no=session['client_no']).count()
+    raffles = Raffle.query.filter_by(client_no=session['client_no']).order_by(Raffle.created_at.desc()).slice(session['raffles_limit'] - 50, session['raffles_limit'])
+
+    if total_entries < 50:
+        showing='1 - %s' % total_entries
+        prev_btn = 'disabled'
+        next_btn='disabled'
+    else:
+        diff = total_entries - (session['raffles_limit'] - 50)
+        if diff > 50:
+            showing = '%s - %s' % (str(session['raffles_limit'] - 49),str(session['raffles_limit']))
+            next_btn='enabled'
+        else:
+            showing = '%s - %s' % (str(session['raffles_limit'] - 49),str((session['raffles_limit']-50)+diff))
+            prev_btn = 'enabled'
+            next_btn='disabled'
+
+    return flask.render_template(
+        'raffles.html',
+        raffles=raffles,
+        showing=showing,
+        total_entries=total_entries,
+        prev_btn=prev_btn,
+        next_btn=next_btn,
+    )
+
+
+@app.route('/raffle/prize/save',methods=['GET','POST'])
+def add_prize():
+    data = flask.request.form.to_dict()
+    prize_id = str(uuid.uuid4().fields[-1])[:5]
+    if session['prizes'] == []:
+        session['prizes'] = [{
+            'id':prize_id,
+            'label':data['label'],
+            'prize':data['prize'],
+            'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        }]
+    else:
+        session['prizes'].append({
+                'id':prize_id,
+                'label':data['label'],
+                'prize':data['prize'],
+                'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+            })
+    return jsonify(
+        template=flask.render_template(
+            'prizes.html',
+            id=prize_id,
+            label=data['label'],
+            prize=data['prize'],
+            ),
+        item_count=len(session['prizes'])
+        )
+
+
+@app.route('/raffle/brand/save',methods=['GET','POST'])
+def add_brand():
+    data = flask.request.form.to_dict()
+    brand_id = str(uuid.uuid4().fields[-1])[:5]
+    if session['brands'] == []:
+        session['brands'] = [{
+            'id':brand_id,
+            'name':data['name'],
+            'code':data['code'],
+            'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        }]
+    else:
+        session['brands'].append({
+                'id':brand_id,
+                'name':data['name'],
+                'code':data['code'],
+                'created_at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+            })
+    return jsonify(
+        template=flask.render_template(
+            'brands.html',
+            id=brand_id,
+            name=data['name'],
+            code=data['code'],
+            ),
+        item_count=len(session['brands'])
+        )
+
+
+@app.route('/raffle/brand/clear',methods=['GET','POST'])
+def clear_rbands():
+    session['brands'] = []
+    return jsonify(status='success'),201
+
+
+@app.route('/raffle/prize/clear',methods=['GET','POST'])
+def clear_prizes():
+    session['prizes'] = []
+    return jsonify(status='success'),201
 
 
 @app.route('/db/rebuild',methods=['GET','POST'])
