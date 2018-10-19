@@ -45,6 +45,11 @@ $('#addPrizeModal').on('hidden.bs.modal', function () {
     $('#savePrizeBtn').attr('disabled', true);
 });
 
+$('#raffleInfoModal').on('hidden.bs.modal', function () {
+  $(this).find('.modal-dialog').html('');
+});
+
+
 $('#forgotPrizeModal').on('hidden.bs.modal', function () {
     $('#forgotPrizeModal .form-control').val('');
     $('#forgotPrizeModal .error-icon-container').addClass('hidden');
@@ -83,21 +88,12 @@ $('#addRaffleModal .form-control').on('keyup', function () {
   desc = $('#addRaffleDesc').val();
   start_date = $('#addRaffleStartDate').val();
   end_date = $('#addRaffleEndDate').val();
-  is_limited = $('#addRaffleIsLimited').hasClass('checked');
   limit = $('#addRaffleSlots').val();
+  min_purchase = $('#addRafflePurchase').val();
+  dti_permit = $('#addRafflePermit').val();
 
-  if ((name != '') && (desc != '') && (start_date != '') && (end_date != '') && (keyword != '')) {
-    if (is_limited) {
-      if (limit != '') {
-        $('#saveRaffleBtn').attr('disabled',false);
-      }
-      else{
-        $('#saveRaffleBtn').attr('disabled',true);
-      }
-    }
-    else {
-      $('#saveRaffleBtn').attr('disabled',false);
-    }
+  if ((name != '') && (desc != '') && (start_date != '') && (end_date != '') && (limit != '') && (keyword != '') && (min_purchase != '') && (dti_permit != '')) {
+    $('#saveRaffleBtn').attr('disabled',false);
   }
   else {
     $('#saveRaffleBtn').attr('disabled',true);
@@ -106,24 +102,16 @@ $('#addRaffleModal .form-control').on('keyup', function () {
 
 $('#addRaffleModal .form-control').on('change', function () {
   name = $('#addRaffleName').val();
+  keyword = $('#addRaffleKeyword').val();
   desc = $('#addRaffleDesc').val();
   start_date = $('#addRaffleStartDate').val();
   end_date = $('#addRaffleEndDate').val();
-  is_limited = $('#addRaffleIsLimited').hasClass('checked');
   limit = $('#addRaffleSlots').val();
+  min_purchase = $('#addRafflePurchase').val();
+  dti_permit = $('#addRafflePermit').val();
 
-  if ((name != '') && (desc != '') && (start_date != '') && (end_date != '') && (keyword != '')) {
-    if (is_limited) {
-      if (limit != '') {
-        $('#saveRaffleBtn').attr('disabled',false);
-      }
-      else{
-        $('#saveRaffleBtn').attr('disabled',true);
-      }
-    }
-    else {
-      $('#saveRaffleBtn').attr('disabled',false);
-    }
+  if ((name != '') && (desc != '') && (start_date != '') && (end_date != '') && (limit != '') && (keyword != '') && (min_purchase != '') && (dti_permit != '')) {
+    $('#saveRaffleBtn').attr('disabled',false);
   }
   else {
     $('#saveRaffleBtn').attr('disabled',true);
@@ -151,6 +139,30 @@ $('#addPrizeModal .form-control').on('change', function () {
   }
   else {
     $('#savePrizeBtn').attr('disabled',true);
+  }
+});
+
+$('#addExistingPrizeModal .form-control').on('keyup', function () {
+  label = $('#addExistingPrizeLabel').val();
+  prize = $('#addExistingPrize').val();
+
+  if ((label != '') && (prize != '')) {
+    $('#saveExistingPrizeBtn').attr('disabled',false);
+  }
+  else {
+    $('#saveExistingPrizeBtn').attr('disabled',true);
+  }
+});
+
+$('#addExistingPrizeModal .form-control').on('change', function () {
+  label = $('#addExistingPrizeLabel').val();
+  prize = $('#addExistingPrize').val();
+
+  if ((label != '') && (prize != '')) {
+    $('#saveExistingPrizeBtn').attr('disabled',false);
+  }
+  else {
+    $('#saveExistingPrizeBtn').attr('disabled',true);
   }
 });
 
@@ -190,7 +202,7 @@ $('#addBrandModal .form-control').on('keyup', function () {
   }
 });
 
-$('#addBrandModal .form-control').on('keyup', function () {
+$('#addBrandModal .form-control').on('change', function () {
   name = $('#addBrandName').val();
   code = $('#addBrandCode').val();
 
@@ -199,6 +211,30 @@ $('#addBrandModal .form-control').on('keyup', function () {
   }
   else {
     $('#saveBrandBtn').attr('disabled',true);
+  }
+});
+
+$('#addExistingBrandModal .form-control').on('keyup', function () {
+  existing_name = $('#addExistingBrandName').val();
+  existing_code = $('#addExistingBrandCode').val();
+
+  if ((existing_name != '') && (existing_code != '')) {
+    $('#saveExistingBrandBtn').attr('disabled',false);
+  }
+  else {
+    $('#saveExistingBrandBtn').attr('disabled',true);
+  }
+});
+
+$('#addExistingBrandModal .form-control').on('change', function () {
+  existing_name = $('#addExistingBrandName').val();
+  existing_code = $('#addExistingBrandCode').val();
+
+  if ((existing_name != '') && (existing_code != '')) {
+    $('#saveExistingBrandBtn').attr('disabled',false);
+  }
+  else {
+    $('#saveExistingBrandBtn').attr('disabled',true);
   }
 });
 

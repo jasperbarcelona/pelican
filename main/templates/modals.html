@@ -120,8 +120,8 @@
                     <div id="errorRaffleKeword" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
                 </div>
                 <div class="input-container whole textarea">
-                    <label for="addRaffleDesc">Description</label>
-                    <textarea id="addRaffleDesc" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleDesc" class="form-control" data-class="input-label" placeholder="This will appear in HELP message"></textarea>
+                    <label for="addRaffleDesc">Reference Link</label>
+                    <textarea id="addRaffleDesc" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleDesc" class="form-control" data-class="input-label" placeholder="Link where your customers can go for more details"></textarea>
                     <div id="errorRaffleDesc" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
                 </div>
                 <div class="input-container left">
@@ -134,15 +134,25 @@
                     <input type="text" id="addRaffleEndDate" data-error="errorRaffleEndDate" onblur="validate_blank(this,this.value)" class="form-control datepicker" data-class="input-label" placeholder="Raffle end date">
                     <div id="errorRaffleEndDate" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
                 </div>
+                <div class="input-container whole">
+                    <label for="addRafflePurchase">Minimum Purchase</label>
+                    <input type="number" id="addRafflePurchase" data-error="errorRafflePurchase" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="PHP 0.00">
+                    <div id="errorRafflePurchase" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container whole">
+                    <label for="addRafflePermit">DTI Permit</label>
+                    <input type="number" id="addRafflePermit" data-error="errorRafflePermit" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="DTI Permit No.">
+                    <div id="errorRafflePermit" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
                 <div class="input-container left">
                     <label for="addRaffleSlots">Slots</label>
-                    <input type="number" id="addRaffleSlots" data-error="errorRaffleSlots" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Maximum Entries" disabled>
+                    <input type="number" id="addRaffleSlots" data-error="errorRaffleSlots" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Maximum Entries">
                     <div id="errorRaffleSlots" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
                 </div>
-                <div class="input-container right">
+                <!-- <div class="input-container right">
                     <label for="addRaffleIsLimited" class="stretch">Limited Slots</label>
                     <input type="checkbox" id="addRaffleIsLimited" class="form-control" data-toggle="toggle">
-                </div>
+                </div> -->
                 <span id="brandCount" class="input-group-label more-margin">Participating Brands: (0 Items)</span>
                 <table id="brandTable" class="table">
                     <thead>
@@ -170,9 +180,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger modal-btn" onclick="clear_raffle_data()">Close</button>
-                <button id="saveRaffleBtn" type="button" class="btn btn-primary modal-btn" onclick="add_raffle()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+                <button id="saveRaffleBtn" type="button" class="btn btn-primary modal-btn" onclick="save_raffle()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
             </div>
         </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="raffleInfoModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
     </div><!-- /.modal-dialog -->
 </div>
 
@@ -198,6 +213,33 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Cancel</button>
                 <button type="button" id="savePrizeBtn" class="btn btn-primary modal-btn" onclick="save_prize()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="addExistingPrizeModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">New Prize</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-container whole">
+                    <label for="addExistingPrizeLabel">Label</label>
+                    <input type="text" data-error="errorExistingPrizeLabel" id="addExistingPrizeLabel" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="e.g. Grand Prize, 2nd Prize, etc..">
+                    <div id="errorExistingPrizeLabel" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+
+                <div class="input-container whole">
+                    <label for="addExistingPrize">Prize</label>
+                    <input type="text" data-error="errorExistingPrize" id="addExistingPrize" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="e.g. PHP 1,000,000">
+                    <div id="errorExistingPrize" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Cancel</button>
+                <button type="button" id="saveExistingPrizeBtn" class="btn btn-primary modal-btn" onclick="save_existing_prize()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -253,6 +295,33 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Cancel</button>
                 <button type="button" id="saveBrandBtn" class="btn btn-primary modal-btn" onclick="save_brand()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="addExistingBrandModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">Participating Brand</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-container whole">
+                    <label for="addExistingBrandName">Brand Name</label>
+                    <input type="text" data-error="errorExistingBrandName" id="addExistingBrandName" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Brand Name">
+                    <div id="errorExistingBrandName" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+
+                <div class="input-container whole">
+                    <label for="addExistingBrandCode">Brand Code</label>
+                    <input type="text" data-error="errorExistingBrandCode" id="addExistingBrandCode" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Brand Code (this is what we'll look for in your transaction records)">
+                    <div id="errorExistingBrandCode" class="error-icon-container hidden tooltip" title="This field is required."tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Cancel</button>
+                <button type="button" id="saveExistingBrandBtn" class="btn btn-primary modal-btn" onclick="save_existing_brand()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

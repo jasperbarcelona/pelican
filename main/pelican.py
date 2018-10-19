@@ -67,6 +67,8 @@ admin = Admin(app, name='raven')
 admin.add_view(SchoolAdmin(Client, db.session))
 admin.add_view(SchoolAdmin(AdminUser, db.session))
 admin.add_view(SchoolAdmin(Raffle, db.session))
+admin.add_view(SchoolAdmin(RafflePrize, db.session))
+admin.add_view(SchoolAdmin(RaffleBrand, db.session))
 admin.add_view(SchoolAdmin(Shopper, db.session))
 admin.add_view(SchoolAdmin(RaffleShopper, db.session))
 admin.add_view(SchoolAdmin(RaffleEntry, db.session))
@@ -86,14 +88,14 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def generate_api_key():
+def generate_ref_key():
     unique = False
     while unique == False:
-        api_key = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(32))
-        existing = AdminUser.query.filter_by(api_key=api_key).first()
+        ref_key = ''.join(random.choice(string.digits) for _ in range(10))
+        existing = Raffle.query.filter_by(ref_key=ref_key).first()
         if not existing or existing == None:
             unique = True
-    return api_key
+    return ref_key
 
 def send_message(address,shortcode,app_id,app_secret,passphrase,message):
     message_options = {
@@ -422,6 +424,117 @@ def show_raffles():
     )
 
 
+@app.route('/raffles/new',methods=['GET','POST'])
+def save_raffle():
+    data = flask.request.form.to_dict()
+
+    raffle = Raffle(
+        client_no=session['client_no'],
+        name=data['name'],
+        title=data['keyword'],
+        description=data['desc'],
+        limited_slots=data['is_limited'],
+        vacant_slots=data['limit'],
+        created_by_id=session['user_id'],
+        created_by_name=session['user_name'],
+        created_date=datetime.datetime.now().strftime('%B %d, %Y'),
+        created_time=time.strftime("%I:%M%p"),
+        start_date=data['start_date'],
+        end_date=data['end_date'],
+        dti_permit=data['dti_permit'],
+        min_purchase_req=data['min_purchase'],
+        ref_key=generate_ref_key(),
+        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        )
+    db.session.add(raffle)
+    db.session.commit()
+
+    for brand in session['brands']:
+        raffle_brand = RaffleBrand(
+            client_no=session['client_no'],
+            raffle_id=raffle.id,
+            brand_name=brand['name'],
+            brand_code=brand['code'],
+            created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+            )
+        db.session.add(raffle_brand)
+
+    for prize in session['prizes']:
+        raffle_prize = RafflePrize(
+            client_no=session['client_no'],
+            raffle_id=raffle.id,
+            prize_label=prize['label'],
+            prize=prize['prize'],
+            created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+            )
+        db.session.add(raffle_prize)
+    db.session.commit()
+
+    session['raffles_limit'] = 50
+    prev_btn = 'disabled'
+    total_entries = Raffle.query.filter_by(client_no=session['client_no']).count()
+    raffles = Raffle.query.filter_by(client_no=session['client_no']).order_by(Raffle.created_at.desc()).slice(session['raffles_limit'] - 50, session['raffles_limit'])
+
+    if total_entries < 50:
+        showing='1 - %s' % total_entries
+        prev_btn = 'disabled'
+        next_btn='disabled'
+    else:
+        diff = total_entries - (session['raffles_limit'] - 50)
+        if diff > 50:
+            showing = '%s - %s' % (str(session['raffles_limit'] - 49),str(session['raffles_limit']))
+            next_btn='enabled'
+        else:
+            showing = '%s - %s' % (str(session['raffles_limit'] - 49),str((session['raffles_limit']-50)+diff))
+            prev_btn = 'enabled'
+            next_btn='disabled'
+
+    return flask.render_template(
+        'raffles.html',
+        raffles=raffles,
+        showing=showing,
+        total_entries=total_entries,
+        prev_btn=prev_btn,
+        next_btn=next_btn,
+    )
+
+
+@app.route('/raffle',methods=['GET','POST'])
+def raffle_info():
+    raffle_id = flask.request.form.get('raffle_id')
+    session['raffle_id'] = raffle_id
+    raffle = Raffle.query.filter_by(id=raffle_id).first()
+    raffle_brands = RaffleBrand.query.filter_by(raffle_id=raffle_id).order_by(RaffleBrand.created_at)
+    brand_count = RaffleBrand.query.filter_by(raffle_id=raffle_id).count()
+    raffle_prizes = RafflePrize.query.filter_by(raffle_id=raffle_id).order_by(RafflePrize.created_at)
+    prize_count = RafflePrize.query.filter_by(raffle_id=raffle_id).count()
+    return jsonify(
+        template = flask.render_template(
+            'raffle_info.html',
+            raffle=raffle,
+            raffle_brands=raffle_brands,
+            raffle_prizes=raffle_prizes,
+            brand_count=brand_count,
+            prize_count=prize_count
+            )
+        )
+
+
+@app.route('/raffle/participants',methods=['GET','POST'])
+def get_raffle_participants():
+
+    participants = Shopper.query.join(RaffleShopper, Shopper.id==RaffleShopper.shopper_id).add_columns(Shopper.id, Shopper.name, Shopper.msisdn, Shopper.address, Shopper.birthday, RaffleShopper.entries).filter(Shopper.id == RaffleShopper.shopper_id).filter(RaffleShopper.shopper_id == session['raffle_id']).order_by(Shopper.name)
+    count = RaffleShopper.query.filter_by(raffle_id=session['raffle_id']).count()
+
+    return jsonify(
+        template = flask.render_template(
+            'raffle_participants.html',
+            participants=participants
+            ),
+        count=count
+        )
+
+
 @app.route('/raffle/prize/save',methods=['GET','POST'])
 def add_prize():
     data = flask.request.form.to_dict()
@@ -448,6 +561,29 @@ def add_prize():
             prize=data['prize'],
             ),
         item_count=len(session['prizes'])
+        )
+
+
+@app.route('/raffle/prize/existing/save',methods=['GET','POST'])
+def add_existing_prize():
+    data = flask.request.form.to_dict()
+    raffle_prize = RafflePrize(
+        raffle_id=session['raffle_id'],
+        prize_label=data['label'],
+        prize=data['prize'],
+        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        )
+    db.session.add(raffle_prize)
+    db.session.commit()
+
+    count = RafflePrize.query.filter_by(raffle_id=session['raffle_id']).count()
+    
+    return jsonify(
+        template=flask.render_template(
+            'prizes_existing.html',
+            prize=raffle_prize
+            ),
+        item_count=count
         )
 
 
@@ -478,6 +614,79 @@ def add_brand():
             ),
         item_count=len(session['brands'])
         )
+
+
+@app.route('/raffle/brand/existing/save',methods=['GET','POST'])
+def add_existing_brand():
+    data = flask.request.form.to_dict()
+    raffle_brand = RaffleBrand(
+        raffle_id=session['raffle_id'],
+        brand_name=data['name'],
+        brand_code=data['code'],
+        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        )
+    db.session.add(raffle_brand)
+    db.session.commit()
+
+    count = RaffleBrand.query.filter_by(raffle_id=session['raffle_id']).count()
+    
+    return jsonify(
+        template=flask.render_template(
+            'brands_existing.html',
+            brand=raffle_brand
+            ),
+        item_count=count
+        )
+
+
+@app.route('/raffle/prize/remove',methods=['GET','POST'])
+def remove_raffle_prize():
+    prize_id = flask.request.form.get('prize_id')
+    for item in session['prizes']:
+        if item['id'] == prize_id:
+            session['prizes'].remove(item)
+    return jsonify(
+        status='success',
+        item_count=len(session['prizes'])
+        ),201
+
+
+@app.route('/raffle/prize/existing/remove',methods=['GET','POST'])
+def remove_existing_raffle_prize():
+    prize_id = flask.request.form.get('prize_id')
+    prize = RafflePrize.query.filter_by(id=prize_id,raffle_id=session['raffle_id']).first()
+    db.session.delete(prize)
+    db.session.commit()
+    prize_count = RafflePrize.query.filter_by(raffle_id=session['raffle_id']).count()
+    return jsonify(
+        status='success',
+        item_count=prize_count
+        ),201
+
+
+@app.route('/raffle/brand/remove',methods=['GET','POST'])
+def remove_raffle_brand():
+    brand_id = flask.request.form.get('brand_id')
+    for item in session['brands']:
+        if item['id'] == brand_id:
+            session['brands'].remove(item)
+    return jsonify(
+        status='success',
+        item_count=len(session['brands'])
+        ),201
+
+
+@app.route('/raffle/brand/existing/remove',methods=['GET','POST'])
+def remove_existing_raffle_brand():
+    brand_id = flask.request.form.get('brand_id')
+    brand = RaffleBrand.query.filter_by(id=brand_id,raffle_id=session['raffle_id']).first()
+    db.session.delete(brand)
+    db.session.commit()
+    brand_count = RaffleBrand.query.filter_by(raffle_id=session['raffle_id']).count()
+    return jsonify(
+        status='success',
+        item_count=brand_count
+        ),201
 
 
 @app.route('/raffle/brand/clear',methods=['GET','POST'])
@@ -512,7 +721,6 @@ def rebuild_database():
         client_no='lcc2018',
         email='hello@pisara.tech',
         password='ratmaxi8',
-        api_key=generate_api_key(),
         name='Super Admin',
         role='Administrator',
         join_date=datetime.datetime.now().strftime('%B %d, %Y'),
@@ -538,12 +746,35 @@ def rebuild_database():
         winner_count=5,
         grand_prize='Php 1,000,000',
         min_purchase_req='1000',
+        ref_key=generate_ref_key(),
+        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        )
+
+    shopper = Shopper(
+        client_no='lcc2018',
+        name='Jasper Barcelona',
+        msisdn='09176214704',
+        address='12, Zamora St., Ciudad Maharlika, Brgy Ilayang Iyam, Lucena City, Quezon',
+        birthday='June 11, 1994',
+        join_date=datetime.datetime.now().strftime('%B %d, %Y'),
+        created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+        )
+
+    raffle_shopper = RaffleShopper(
+        client_no='lcc2018',
+        raffle_id=1,
+        shopper_id=1,
+        entries=1,
+        register_date=datetime.datetime.now().strftime('%B %d, %Y'),
+        register_time=time.strftime("%I:%M %p"),
         created_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
         )
 
     db.session.add(client)
     db.session.add(admin)
     db.session.add(raffle)
+    db.session.add(shopper)
+    db.session.add(raffle_shopper)
     db.session.commit()
 
     return jsonify(

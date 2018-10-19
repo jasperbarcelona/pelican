@@ -1,0 +1,196 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" id="gridSystemModalLabel">Raffle Info</h4>
+    </div>
+    <div class="modal-body">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#raffleInfoTab" onclick="hide_participant_count()">Raffle Info</a></li>
+            <li><a data-toggle="tab" href="#raffleParticipantsTab" onclick="get_raffle_participants()">Participants</a></li>
+            <li><a data-toggle="tab" href="#raffleResultsTab" onclick="hide_participant_count()">Results</a></li>
+            <div class="participant-count-container">
+                <span id="raffleParticipantCount" class="hidden"></span>
+            </div>
+        </ul>
+        <div class="tab-content">
+            <div id="raffleInfoTab" class="tab-pane fade in active">
+                <br/>
+                <div class="input-container whole">
+                    <label for="editRaffleName">Name</label>
+                    <input type="text" id="editRaffleName" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleNameEdit" class="form-control" data-class="input-label" placeholder="Raffle name" value="{{ raffle.name }}">
+                    <div id="errorRaffleNameEdit" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container whole">
+                    <label for="editRaffleName">Keyword</label>
+                    <input type="text" id="editRaffleKeyword" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleKewordEdit" class="form-control" data-class="input-label" placeholder="This is the keyword that the participants will use (must not contain spaces)" onkeypress="return restrict_space(event)" value="{{ raffle.title }}">
+                    <div id="errorRaffleKewordEdit" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container whole textarea">
+                    <label for="editRaffleDesc">Reference Link</label>
+                    <textarea id="editRaffleDesc" onblur="validate_blank(this,this.value)" onchange="validate_blank(this,this.value)" data-error="errorRaffleDescEdit" class="form-control" data-class="input-label" placeholder="Link where your customers can go for more details">{{ raffle.description }}</textarea>
+                    <div id="errorRaffleDescEdit" class="error-icon-container hidden tooltip" title="This field is required." title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container left">
+                    <label for="editRaffleStartDate">Start Date</label>
+                    <input type="text" id="editRaffleStartDate" data-error="errorRaffleStartDateEdit" onblur="validate_blank(this,this.value)" class="form-control datepicker" data-class="input-label" placeholder="Raffle start date" value="{{ raffle.start_date }}">
+                    <div id="errorRaffleStartDateEdit" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container right">
+                    <label for="editRaffleEndDate">End Date</label>
+                    <input type="text" id="editRaffleEndDate" data-error="errorRaffleEndDateEdit" onblur="validate_blank(this,this.value)" class="form-control datepicker" data-class="input-label" placeholder="Raffle end date" value="{{ raffle.end_date }}">
+                    <div id="errorRaffleEndDateEdit" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container whole">
+                    <label for="editRafflePurchase">Minimum Purchase</label>
+                    <input type="number" id="editRafflePurchase" data-error="errorRafflePurchaseEdit" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="PHP 0.00" value="{{ raffle.min_purchase_req }}">
+                    <div id="errorRafflePurchaseEdit" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container whole">
+                    <label for="editRafflePermit">DTI Permit</label>
+                    <input type="number" id="editRafflePermit" data-error="errorRafflePermitEdit" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="DTI Permit No." value="{{ raffle.dti_permit }}">
+                    <div id="errorRafflePermitEdit" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+
+                {% if not raffle.limited_slots %}
+                <div class="input-container left">
+                    <label for="editRaffleSlots">Slots</label>
+                    <input type="number" id="editRaffleSlots" data-error="errorRaffleSlotsEdit" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Maximum Entries" disabled>
+                    <div id="errorRaffleSlotsEdit" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container right">
+                    <label for="editRaffleIsLimited" class="stretch">Limited Slots</label>
+                    <input type="checkbox" id="editRaffleIsLimited" class="form-control" data-toggle="toggle">
+                </div>
+                {% else %}
+                <div class="input-container left">
+                    <label for="editRaffleSlots">Slots</label>
+                    <input type="number" id="editRaffleSlots" data-error="errorRaffleSlotsEdit" onblur="validate_blank(this,this.value)" class="form-control" data-class="input-label" placeholder="Maximum Entries" value="{{ raffle.vacant_slots }}">
+                    <div id="errorRaffleSlotsEdit" class="error-icon-container hidden tooltip" title="This field is required."><i class="material-icons">&#xE001;</i></div>
+                </div>
+                <div class="input-container right">
+                    <label for="editRaffleIsLimited" class="stretch">Limited Slots</label>
+                    <input type="checkbox" id="editRaffleIsLimited" class="form-control checked" checked data-toggle="toggle">
+                </div>
+                {% endif %}
+
+                <span id="brandExistingCount" class="input-group-label more-margin">Participating Brands: ({{ brand_count }} Items)</span>
+                <table id="brandExistingTable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="brand-name-td">Brand Name</th>
+                            <th class="brand-code-td">Code (POS)</th>
+                            <th class="brand-delete-td"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for brand in raffle_brands %}
+                        <tr id="{{ brand.id }}" class="brand">
+                            <td class="brand-name-td">{{ brand.brand_name }}</td>
+                            <td class="brand-code-td">{{ brand.brand_code }}</td>
+                            <td class="brand-delete-td" onclick="delete_existing_brand({{ brand.id }})">
+                                <i class="material-icons delete-brand">&#xE5CD;</i>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button id="addExistingBrandBtn" class="btn btn-primary" data-toggle="modal" data-target="#addExistingBrandModal">Add Brand</button>
+                <span id="prizeExistingCount" class="input-group-label more-margin">Prizes: ({{ prize_count }} Items)</span>
+                <table id="prizeExistingTable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="prize-label-td">Label</th>
+                            <th class="prize-td">Prize</th>
+                            <th class="prize-delete-td"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prize in raffle_prizes %}
+                        <tr id="{{ prize.id }}" class="prize">
+                            <td class="prize-label-td">{{ prize.prize_label }}</td>
+                            <td class="prize-td">{{ prize.prize }}</td>
+                            <td class="prize-delete-td" onclick="delete_existing_prize({{ prize.id }})">
+                                <i class="material-icons delete-prize">&#xE5CD;</i>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button id="addExistingPrizeBtn" class="btn btn-primary" data-toggle="modal" data-target="#addExistingPrizeModal">Add Prize</button>
+            </div>
+            <div id="raffleParticipantsTab" class="tab-pane fade">
+                <div id="raffleParticipantsLoader" class="tab-loader">
+                    <span>Loading..</span>
+                </div>
+                <div class="raffle-participants-container">
+                </div>
+            </div>
+            <div id="raffleResultsTab" class="tab-pane fade">
+                results
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger modal-btn" data-dismiss="modal">Close</button>
+        <button id="editRaffleBtn" type="button" class="btn btn-primary modal-btn" onclick="save_raffle()" data-loading-text="Saving.." data-complete-text="Save" disabled>Save</button>
+    </div>
+</div><!-- /.modal-content -->
+
+<script type="text/javascript">
+    $(function() {
+        $('#editRaffleIsLimited').bootstrapToggle();
+    })
+
+    $('#editRaffleIsLimited').on('change', function () { 
+      $(this).toggleClass('checked')
+      if ($(this).hasClass('checked')) {
+        $('#editRaffleSlots').attr('disabled', false);
+        $('#editRaffleSlots').focus();
+      }
+      else {
+        error_icon_id = $('#editRaffleSlots').attr('data-error');
+        $('#editRaffleSlots').attr('disabled', true);
+        $('#editRaffleSlots').val('');
+        $('#editRaffleSlots').css("border", "1px solid #999");
+        $('#'+error_icon_id).addClass('hidden');
+        $('#'+error_icon_id).addClass('tooltip');
+      }
+    });
+
+
+
+    $('#raffleInfoModal .form-control').on('keyup', function () {
+      name = $('#editRaffleName').val();
+      keyword = $('#editRaffleKeyword').val();
+      desc = $('#editRaffleDesc').val();
+      start_date = $('#editRaffleStartDate').val();
+      end_date = $('#editRaffleEndDate').val();
+      limit = $('#editRaffleSlots').val();
+      min_purchase = $('#editRafflePurchase').val();
+      dti_permit = $('#editRafflePermit').val();
+
+      if ((name != '') && (desc != '') && (start_date != '') && (end_date != '') && (limit != '') && (keyword != '') && (min_purchase != '') && (dti_permit != '')) {
+        $('#editRaffleBtn').attr('disabled',false);
+      }
+      else {
+        $('#editRaffleBtn').attr('disabled',true);
+      }
+    });
+
+    $('#raffleInfoModal .form-control').on('change', function () {
+      name = $('#editRaffleName').val();
+      keyword = $('#editRaffleKeyword').val();
+      desc = $('#editRaffleDesc').val();
+      start_date = $('#editRaffleStartDate').val();
+      end_date = $('#editRaffleEndDate').val();
+      limit = $('#editRaffleSlots').val();
+      min_purchase = $('#editRafflePurchase').val();
+      dti_permit = $('#editRafflePermit').val();
+
+      if ((name != '') && (desc != '') && (start_date != '') && (end_date != '') && (limit != '') && (keyword != '') && (min_purchase != '') && (dti_permit != '')) {
+        $('#editRaffleBtn').attr('disabled',false);
+      }
+      else {
+        $('#editRaffleBtn').attr('disabled',true);
+      }
+    });
+</script>

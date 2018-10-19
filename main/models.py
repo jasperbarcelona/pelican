@@ -62,9 +62,9 @@ class Raffle(db.Model):
     name = db.Column(db.String(50))
     title = db.Column(db.String(50))
     description = db.Column(db.Text())
-    auto_draw = db.Column(db.Boolean())
+    auto_draw = db.Column(db.Boolean(), default=False)
     limited_slots = db.Column(db.Boolean())
-    vacant_slots = db.Column(db.Integer)
+    vacant_slots = db.Column(db.String(30))
     participants = db.Column(db.Integer, default=0)
     created_by_id = db.Column(db.Integer)
     created_by_name = db.Column(db.String(100))
@@ -80,6 +80,24 @@ class Raffle(db.Model):
     winner_count = db.Column(db.Integer)
     grand_prize = db.Column(db.String(60))
     min_purchase_req = db.Column(db.String(10))
+    ref_key = db.Column(db.String(12))
+    status = db.Column(db.String(10),default='Pending')
+    created_at = db.Column(db.String(50))
+
+class RaffleBrand(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    client_no = db.Column(db.String(32))
+    raffle_id = db.Column(db.Integer)
+    brand_name = db.Column(db.String(60))
+    brand_code = db.Column(db.String(60))
+    created_at = db.Column(db.String(50))
+
+class RafflePrize(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    client_no = db.Column(db.String(32))
+    raffle_id = db.Column(db.Integer)
+    prize_label = db.Column(db.String(60))
+    prize = db.Column(db.Text())
     created_at = db.Column(db.String(50))
 
 class Shopper(db.Model):
@@ -99,6 +117,7 @@ class RaffleShopper(db.Model):
     shopper_id = db.Column(db.Integer)
     register_date = db.Column(db.String(20))
     register_time = db.Column(db.String(10))
+    entries = db.Column(db.Integer())
     created_at = db.Column(db.String(50))
 
 class RaffleEntry(db.Model):

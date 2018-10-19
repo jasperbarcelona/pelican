@@ -366,6 +366,10 @@ input[type=number]::-webkit-outer-spin-button {
 	text-align: right;
 }
 
+.align-center {
+	text-align: center;
+}
+
 .icon-td i,
 .blast-icon-td i,
 .contact-icon-td i,
@@ -382,7 +386,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .icon-td {
-	width: 5%;
+	width: 15%;
 }
 
 .name-td {
@@ -390,19 +394,19 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .start-date-td {
-	width: 20%;
+	width: 17.5%;
 }
 
 .end-date-td {
-	width: 20%;
+	width: 17.5%;
 }
 
 .participants-td {
-	width: 15%;
+	width: 12%;
 }
 
 .slots-td {
-	width: 15%;
+	width: 13%;
 }
 
 .prize-label-td,
@@ -419,8 +423,9 @@ input[type=number]::-webkit-outer-spin-button {
 
 .delete-prize,
 .delete-brand {
-	font-size: 14px !important;
+	font-size: 16px !important;
 	color: #d9534f;
+	cursor: pointer;
 }
 
 #editUserApi, .user-api-td {
@@ -789,7 +794,8 @@ input[type=number]::-webkit-outer-spin-button {
 	z-index: 9999 !important;
 }
 
-#addRaffleModal .modal-body {
+#addRaffleModal .modal-body,
+#raffleInfoModal .modal-body {
 	height: calc(100vh - 180px);
 	padding-left: 30px;
 	padding-right: 30px;
@@ -798,8 +804,9 @@ input[type=number]::-webkit-outer-spin-button {
 	background-color: #FFFFFF;
 }
 
-#addRaffleModal .modal-dialog {
-	width: 900px;
+#addRaffleModal .modal-dialog,
+#raffleInfoModal .modal-dialog {
+	width: 1000px;
 }
 
 #searchGroupFromContact {
@@ -810,13 +817,32 @@ input[type=number]::-webkit-outer-spin-button {
 	background-color: #FFFFFF;
 }
 
-#addRaffleModal .form-control:not(#addRaffleDesc) {
+#addRaffleModal .form-control:not(#addRaffleDesc),
+#raffleInfoModal .form-control:not(#editRaffleDesc) {
 	height: 40px;
 	font-size: 15px;
 }
 
-#addRaffleIsLimited {
+#addRaffleIsLimited,
+#editRaffleIsLimited {
 	width: 200px !important;
+}
+
+#modalLoader {
+	position: absolute;
+	z-index: 999;
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	background-color: rgba(0,0,0,.3);
 }
 
 .stretch {
@@ -1665,8 +1691,85 @@ textarea {
   	-ms-user-select: none;
 }
 
+.raffle-participant-search-panel th .form-control {
+	font-size: 14px !important;
+	height: 30px !important;
+}
+
 .forgot-label {
 	float: left;
 	width: 100%;
 	margin-bottom: 20px;
+}
+
+.raffle-participant-name-td {
+	width: 25%
+}
+
+.raffle-participant-address-td {
+	width: 30%;
+}
+
+.raffle-participant-birthday-td {
+	width: 17.5%
+}
+
+.raffle-participant-msisdn-td {
+	width: 17.5%;
+}
+
+.raffle-participant-entries-td {
+	width: 10%;
+}
+
+.amber {
+	color: #f0ad4e;
+}
+
+.green {
+	color: #5cb85c;
+}
+
+.red {
+	color: #d9534f;
+}
+
+.participant-count-container {
+	float: right;
+	height: 40px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.tab-content {
+	position: relative !important;
+	min-height: calc(100% - 30px) !important;
+}
+
+.tab-pane {
+	min-height: 100% !important;
+}
+
+.tab-loader {
+	position: absolute;
+	z-index: 999;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	background-color: #FFFFFF;
 }

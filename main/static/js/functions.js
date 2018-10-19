@@ -377,38 +377,6 @@ function restrict_space(event) {
     if (k == 32) return false;
 }
 
-function add_raffle() {
-  $('#saveRaffleBtn').button('loading');
-
-  if ($('#prizeTable tbody tr').length == 0) {
-    $('#forgotPrizeModal').modal('show');
-    $('#saveWaybillBtn').button('complete');
-  }
-  else {
-    name = $('#addRaffleName').val();
-    keyword = $('#addRaffleKeyword').val();
-    desc = $('#addRaffleDesc').val();
-    start_date = $('#addRaffleStartDate').val();
-    end_date = $('#addRaffleEndDate').val();
-    is_limited = $('#addRaffleIsLimited').hasClass('checked');
-    limit = $('#addRaffleSlots').val();
-    $.post('/raffle/new',
-    {
-      name:name,
-      keyword:keyword,
-      desc:desc,
-      start_date:start_date,
-      end_date:end_date,
-      is_limited:is_limited,
-      limit:limit
-    },
-    function(data){
-      
-    });
-  }
-  $('#saveRaffleBtn').button('complete');
-}
-
 function save_prize() {
   $('#savePrizeBtn').button('loading');
   label = $('#addPrizeLabel').val();
@@ -453,6 +421,50 @@ function save_brand() {
     });
 }
 
+function save_existing_brand() {
+  $('#saveExistingBrandBtn').button('loading');
+  name = $('#addExistingBrandName').val();
+  code = $('#addExistingBrandCode').val();
+  $.post('/raffle/brand/existing/save',
+  {
+    name:name,
+    code:code
+  },
+    function(data){
+      $('#brandExistingTable tbody').append(data['template']);
+      if (data['item_count'] == 1){
+        $('#brandExistingCount').html('Participating Brands: ('+data['item_count']+' item)');
+      }
+      else {
+        $('#brandExistingCount').html('Participating Brands: ('+data['item_count']+' items)');
+      }
+      $('#addExistingBrandModal').modal('hide');
+      $('#saveExistingBrandBtn').button('complete');
+    });
+}
+
+function save_existing_prize() {
+  $('#saveExistingPrizeBtn').button('loading');
+  label = $('#addExistingPrizeLabel').val();
+  prize = $('#addExistingPrize').val();
+  $.post('/raffle/prize/existing/save',
+  {
+    label:label,
+    prize:prize
+  },
+    function(data){
+      $('#prizeExistingTable tbody').append(data['template']);
+      if (data['item_count'] == 1){
+        $('#prizeExistingCount').html('Prizes: ('+data['item_count']+' item)');
+      }
+      else {
+        $('#prizeExistingCount').html('Prizes: ('+data['item_count']+' items)');
+      }
+      $('#addExistingPrizeModal').modal('hide');
+      $('#saveExistingPrizeBtn').button('complete');
+    });
+}
+
 
 function save_forgot_prize() {
   $('#saveForgotPrizeBtn').button('loading');
@@ -492,4 +504,148 @@ function clear_raffle_data() {
     $('#addRaffleModal .modal-body').scrollTop(0);
     $('.prize').remove();
   });
+}
+
+function delete_prize(prize_id) {
+  $.post('/raffle/prize/remove',
+  {
+    prize_id:prize_id
+  },
+  function(data){
+    $('#'+prize_id+'.prize').remove();
+    if (data['item_count'] == 1){
+      $('#prizeCount').html('Prizes ('+data['item_count']+' item)');
+    }
+    else {
+      $('#prizeCount').html('Prizes ('+data['item_count']+' items)');
+    }
+  });
+}
+
+function delete_existing_prize(prize_id) {
+  $.post('/raffle/prize/existing/remove',
+  {
+    prize_id:prize_id
+  },
+  function(data){
+    $('#'+prize_id+'.prize').remove();
+    if (data['item_count'] == 1){
+      $('#prizeCount').html('Prizes ('+data['item_count']+' item)');
+    }
+    else {
+      $('#prizeCount').html('Prizes ('+data['item_count']+' items)');
+    }
+  });
+}
+
+function delete_brand(brand_id) {
+  $.post('/raffle/brand/remove',
+  {
+    brand_id:brand_id
+  },
+  function(data){
+    $('#'+brand_id+'.brand').remove();
+    if (data['item_count'] == 1){
+      $('#brandCount').html('Participating Brands ('+data['item_count']+' item)');
+    }
+    else {
+      $('#brandCount').html('Participating Brands ('+data['item_count']+' items)');
+    }
+  });
+}
+
+function delete_existing_brand(brand_id) {
+  $.post('/raffle/brand/existing/remove',
+  {
+    brand_id:brand_id
+  },
+  function(data){
+    $('#'+brand_id+'.brand').remove();
+    if (data['item_count'] == 1){
+      $('#brandCount').html('Participating Brands ('+data['item_count']+' item)');
+    }
+    else {
+      $('#brandCount').html('Participating Brands ('+data['item_count']+' items)');
+    }
+  });
+}
+
+function save_raffle() {
+  $('#saveRaffleBtn').button('loading');
+
+  if ($('#prizeTable tbody tr').length == 0) {
+    $('#forgotPrizeModal').modal('show');
+    $('#saveRaffleBtn').button('complete');
+  }
+
+  else{
+    name = $('#addRaffleName').val();
+    keyword = $('#addRaffleKeyword').val();
+    desc = $('#addRaffleDesc').val();
+    start_date = $('#addRaffleStartDate').val();
+    end_date = $('#addRaffleEndDate').val();
+    is_limited = $('#addRaffleIsLimited').hasClass('checked');
+    limit = $('#addRaffleSlots').val();
+    min_purchase = $('#addRafflePurchase').val();
+    dti_permit = $('#addRafflePermit').val();
+
+    $.post('/raffles/new',
+    {
+      name:name,
+      keyword:keyword,
+      desc:desc,
+      start_date:start_date,
+      end_date:end_date,
+      is_limited:is_limited,
+      limit:limit,
+      dti_permit:dti_permit,
+      min_purchase:min_purchase
+    },
+    function(data){
+      $('.content').html(data);
+      $('#addRaffleModal').modal('hide');
+
+      $('#addRaffleModal .form-control').val('');
+      $('#addRaffleIsLimited').prop('checked', false).change()
+      $('#addRaffleIsLimited').removeClass('checked').change()
+      $('#addRaffleModal .form-control').change();
+      $('#prizeCount').html('Prizes (0 items)');
+      $('#addRaffleModal .error-icon-container').addClass('hidden');
+      $('#addRaffleModal .form-control').css('border','1px solid #999');
+      $('#cancelRaffleBtn').button('complete');
+      $('#addRaffleModal .modal-body').scrollTop(0);
+      $('.prize').remove();
+    });
+  }
+}
+
+function open_raffle(raffle_id) {
+  $('#raffleInfoModal').modal({backdrop: 'static', keyboard: false})
+  $.post('/raffle',
+  {
+    raffle_id:raffle_id
+  },
+  function(data){
+    $('#raffleInfoModal .modal-dialog').html(data['template']);
+  });
+}
+
+function get_raffle_participants() {
+  $('#raffleParticipantsLoader').removeClass('hidden');
+  $.get('/raffle/participants',
+  function(data){
+    $('.raffle-participants-container').html(data['template']);
+    if (data['count'] == 1) {
+      $('#raffleParticipantCount').html(String(data['count']) + ' entry');
+    }
+    else {
+      $('#raffleParticipantCount').html(String(data['count']) + ' entries');
+    }
+    $('#raffleParticipantsLoader').addClass('hidden');
+    $('#raffleParticipantCount').removeClass('hidden');
+  });
+}
+
+function hide_participant_count() {
+  $('#raffleParticipantCount').addClass('hidden');
 }

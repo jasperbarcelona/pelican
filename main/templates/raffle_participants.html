@@ -1,0 +1,32 @@
+<table class="table" id="raffleParticipantsTable">
+    <thead>
+        <tr class="raffle-participant-search-panel">
+            <th class="raffle-participant-name-td">
+                <input type="text" id="searchRaffleParticipantName" class="form-control" placeholder="Name">
+            </th>
+            <th class="raffle-participant-address-td">
+                <input type="text" id="searchRaffleParticipantAddress" class="form-control" placeholder="Address">
+            </th>
+            <th class="raffle-participant-birthday-td">
+                <input type="text" id="searchRaffleParticipantBirthday" class="form-control align-right" placeholder="Birthday">
+            </th>
+            <th class="raffle-participant-msisdn-td">
+                <input type="text" id="searchRaffleParticipantMsisdn" class="form-control align-right" placeholder="Mobile No.">
+            </th>
+            <th class=".raffle-participant-entries-td">
+                <input type="text" id="searchRaffleParticipantEntries" class="form-control align-right" placeholder="Entries">
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in participants %}
+        <tr>
+            <td class="raffle-participant-name-td">{{ entry.name }}</td>
+            <td class="raffle-participant-address-td">{{ entry.address }}</td>
+            <td class="raffle-participant-birthday-td align-right">{{ entry.birthday }}</td>
+            <td class="raffle-participant-msisdn-td align-right">{{ entry.msisdn }}</td>
+            <td class="raffle-participant-entries-td align-right">{{ entry.entries }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

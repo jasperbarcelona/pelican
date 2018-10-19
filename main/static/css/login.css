@@ -44,14 +44,14 @@ body{
 #login-form-loader{
   height: 100%;
   width: 100%;
-  background-color: #d9534f;
+  background-color: #337AB7;
   display: none;
 }
 
 #login-intro{
   height: 100%;
   width: 100%;
-  background-color: #d9534f;
+  background-color: #337AB7;
 }
 
 .clickable{
